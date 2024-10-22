@@ -1,2 +1,3 @@
-# RNCourse
-Start to work with React Native
+# React Native practice projects
+
+1. todo-list
