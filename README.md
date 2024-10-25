@@ -1,3 +1,4 @@
-# React Native practice projects
-
-1. todo-list
+![Start game](./assets//demo-app//start.jpg)
+![On game](./assets//demo-app//game.jpg)
+![Alert ](./assets//demo-app//alert.jpg)
+![Start game](./assets//demo-app//game-over.jpg)
