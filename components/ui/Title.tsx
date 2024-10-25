@@ -1,4 +1,4 @@
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, Platform } from "react-native";
 
 type TitleProps = {
   children: React.ReactNode | undefined;
@@ -14,7 +14,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "white",
-    borderWidth: 4,
+    // borderWidth: Platform.OS === "android" ? 2 : 0,
+    borderWidth: Platform.select({
+      android: 4,
+      ios: 0,
+      default: 2,
+    }),
     borderColor: "white",
     textAlign: "center",
     padding: 8,
