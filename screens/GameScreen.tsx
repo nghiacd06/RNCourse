@@ -100,6 +100,8 @@ const GameScreen = ({ userNumber, onGameOver }: GameScreenProps) => {
           <Text key={item}>{item}</Text>
         ))} */}
         <FlatList
+          style={styles.guessList}
+          showsVerticalScrollIndicator={false}
           data={guessRounds}
           renderItem={({ item, index }) => (
             <GuessLogItem
@@ -107,7 +109,7 @@ const GameScreen = ({ userNumber, onGameOver }: GameScreenProps) => {
               roundNumber={guessRoundListLength - index}
             />
           )}
-          keyExtractor={(item) => `${item}`}
+          keyExtractor={(item, index) => `${item}_${index}`}
         />
       </View>
     </View>
@@ -129,7 +131,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   guessListContainer: {
-    marginTop: 24,
+    flex: 1,
+    padding: 6,
+  },
+  guessList: {
+    padding: 6,
   },
 });
 
