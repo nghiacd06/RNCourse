@@ -12,10 +12,10 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import { useRoute } from "@react-navigation/native";
-import MealItem from "../components/MealItem";
 import Meal from "../models/meal";
 import { RootStackParamList } from "../App";
 import { useLayoutEffect } from "react";
+import MealsList from "../components/MealsList/MealsList";
 
 type MealsOverviewRouteParams = { categoryId: string };
 
@@ -41,26 +41,9 @@ const MealsOverviewScreen = () => {
     };
   }, [categoryId, navigation]);
 
-  const renderMealItem = (itemData: ListRenderItemInfo<Meal>) => {
-    return <MealItem data={itemData.item} />;
-  };
-
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={meals}
-        keyExtractor={(item) => item.id}
-        renderItem={renderMealItem}
-      />
-    </View>
-  );
+  return <MealsList meals={meals} />;
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-  },
-});
+const styles = StyleSheet.create({});
 
 export default MealsOverviewScreen;

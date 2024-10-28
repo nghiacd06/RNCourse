@@ -8,11 +8,12 @@ import {
 import { useRoute } from "@react-navigation/native";
 import Meal from "../models/meal";
 import { RootStackParamList } from "../App";
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import MealDetails from "../components/MealDetails";
 import SubTitle from "../components/MealDetail/SubTitle";
 import List from "../components/MealDetail/List";
 import IconButton from "../components/IconButton";
+import { FavoritesContext } from "../store/context/favorites-context";
 
 type MealsOverviewRouteParams = { mealId: string };
 
@@ -22,10 +23,23 @@ const MealDetailsScreen = () => {
     useRoute<RouteProp<{ params: MealsOverviewRouteParams }, "params">>();
   const mealId = route.params.mealId;
 
+  const {
+    ids: favoriteMealIds,
+    addFavorite,
+    removeFavorite,
+  } = useContext(FavoritesContext);
+
   const mealData: Meal | undefined = MEALS.find((item) => item.id === mealId);
 
-  const onHeaderButtonPressed = () => {
-    console.log("Pressed!");
+  const isFavoriteMeal = favoriteMealIds.includes(mealId);
+
+  const onChangeFavoriteStatus = () => {
+    if (isFavoriteMeal) {
+      removeFavorite(mealId);
+      return;
+    }
+
+    addFavorite(mealId);
   };
 
   useLayoutEffect(() => {
@@ -33,8 +47,8 @@ const MealDetailsScreen = () => {
       title: mealData?.title,
       headerRight: () => (
         <IconButton
-          onPress={onHeaderButtonPressed}
-          icon="star"
+          onPress={onChangeFavoriteStatus}
+          icon={isFavoriteMeal ? "star" : "star-outline"}
           color="white"
         />
       ),
@@ -43,7 +57,7 @@ const MealDetailsScreen = () => {
     return () => {
       // TODO
     };
-  }, [mealData, navigation, onHeaderButtonPressed]);
+  }, [mealData, navigation, onChangeFavoriteStatus, isFavoriteMeal]);
 
   return mealData ? (
     <ScrollView style={styles.container}>
