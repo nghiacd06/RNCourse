@@ -13,7 +13,10 @@ import MealDetails from "../components/MealDetails";
 import SubTitle from "../components/MealDetail/SubTitle";
 import List from "../components/MealDetail/List";
 import IconButton from "../components/IconButton";
-import { FavoritesContext } from "../store/context/favorites-context";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../store/redux/store";
+import { addFavorite, removeFavorite } from "../store/redux/slices/favorite";
+// import { FavoritesContext } from "../store/context/favorites-context";
 
 type MealsOverviewRouteParams = { mealId: string };
 
@@ -23,23 +26,40 @@ const MealDetailsScreen = () => {
     useRoute<RouteProp<{ params: MealsOverviewRouteParams }, "params">>();
   const mealId = route.params.mealId;
 
-  const {
-    ids: favoriteMealIds,
-    addFavorite,
-    removeFavorite,
-  } = useContext(FavoritesContext);
+  const dispatch = useDispatch<AppDispatch>();
+
+  /// --- with Context
+  // const {
+  //   ids: favoriteMealIds,
+  //   addFavorite,
+  //   removeFavorite,
+  // } = useContext(FavoritesContext);
+
+  /// --- with Redux
+  const { ids: favoriteMealIds } = useSelector(
+    (state: RootState) => state.favoriteMeals
+  );
 
   const mealData: Meal | undefined = MEALS.find((item) => item.id === mealId);
 
   const isFavoriteMeal = favoriteMealIds.includes(mealId);
 
   const onChangeFavoriteStatus = () => {
+    /// --- with Context
+    // if (isFavoriteMeal) {
+    //   removeFavorite(mealId);
+    //   return;
+    // }
+
+    // addFavorite(mealId);
+
+    /// --- with Redux
     if (isFavoriteMeal) {
-      removeFavorite(mealId);
+      dispatch(removeFavorite(mealId));
       return;
     }
 
-    addFavorite(mealId);
+    dispatch(addFavorite(mealId));
   };
 
   useLayoutEffect(() => {
