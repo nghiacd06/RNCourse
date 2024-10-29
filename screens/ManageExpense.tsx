@@ -9,8 +9,9 @@ import { RootStackNavigationParamList } from "../App";
 import { useContext, useLayoutEffect, useMemo } from "react";
 import IconButton from "../components/UI/IconButton";
 import { globalStyles } from "../constants/styles";
-import CustomButton from "../components/UI/Button";
 import { ExpensesContext } from "../store/expenses-context";
+import ExpenseForm from "../components/ManageExpense/ExpenseForm";
+import { Expense } from "../types/Expense";
 
 const ManageExpense = () => {
   const { params } =
@@ -48,42 +49,27 @@ const ManageExpense = () => {
     navigation.goBack();
   };
 
-  const onConfirm = () => {
+  const onConfirm = (
+    expenseData: Pick<Expense, "amount" | "description" | "date">
+  ) => {
     if (!editingExpense) {
-      addExpense({
-        description: "test add",
-        amount: 112.59,
-        date: new Date(),
-      });
-      navigation.goBack();
-      return;
+      addExpense(expenseData);
+    } else {
+      updateExpense(editingExpense.id, expenseData);
     }
 
-    updateExpense(editingExpense.id, {
-      description: "test update",
-      amount: 112.59,
-      date: new Date(),
-    });
     navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttons}>
-        <CustomButton
-          mode="flat"
-          onPress={onCancel}
-          style={styles.button}
-        >
-          Cancel
-        </CustomButton>
-        <CustomButton
-          onPress={onConfirm}
-          style={styles.button}
-        >
-          {!!editingExpense ? "Update" : "Add"}
-        </CustomButton>
-      </View>
+      <ExpenseForm
+        submitButtonLabel={!!editingExpense ? "Update" : "Add"}
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+        defaultValues={editingExpense}
+      />
+
       {!!editingExpense && (
         <View style={styles.deleteContainer}>
           <IconButton
@@ -94,7 +80,6 @@ const ManageExpense = () => {
           />
         </View>
       )}
-      <Text>Manage Expense</Text>
     </View>
   );
 };
@@ -104,15 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 24,
     backgroundColor: globalStyles.colors.primary700,
-  },
-  buttons: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  button: {
-    minWidth: 120,
-    marginHorizontal: 8,
   },
   deleteContainer: {
     paddingTop: 8,
