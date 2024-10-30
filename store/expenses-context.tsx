@@ -1,42 +1,10 @@
 import { createContext, useReducer } from "react";
 import { Expense } from "../types/Expense";
 
-export const DUMMY_EXPENSES: Expense[] = [
-  {
-    id: "e1",
-    description: "A pair of shoes",
-    amount: 59.99,
-    date: new Date("2024-12-19"),
-  },
-  {
-    id: "e2",
-    description: "A pair of trousers",
-    amount: 89.29,
-    date: new Date("2024-01-05"),
-  },
-  {
-    id: "e3",
-    description: "Some bananas",
-    amount: 5.99,
-    date: new Date("2024-12-11"),
-  },
-  {
-    id: "e4",
-    description: "A book",
-    amount: 14.99,
-    date: new Date("2024-12-19"),
-  },
-  {
-    id: "e5",
-    description: "Another book",
-    amount: 18.59,
-    date: new Date("2024-12-18"),
-  },
-];
-
 type ExpensesContextProps = {
   expenses: Expense[];
-  addExpense: (data: Pick<Expense, "description" | "amount" | "date">) => void;
+  addExpense: (data: Expense) => void;
+  setExpenses: (expenses: Expense[]) => void;
   deleteExpense: (id: Expense["id"]) => void;
   updateExpense: (
     id: Expense["id"],
@@ -45,8 +13,9 @@ type ExpensesContextProps = {
 };
 
 const initialValue: ExpensesContextProps = {
-  expenses: DUMMY_EXPENSES,
+  expenses: [],
   addExpense: ({ description, amount, date }) => {},
+  setExpenses: ([]) => {},
   deleteExpense: (id) => {},
   updateExpense: (id, { description, amount, date }) => {},
 };
@@ -57,7 +26,8 @@ export { ExpensesContext };
 
 // Define action types
 type Action =
-  | { type: "ADD"; payload: Pick<Expense, "description" | "amount" | "date"> }
+  | { type: "ADD"; payload: Expense }
+  | { type: "SET"; payload: Expense[] }
   | { type: "DELETE"; payload: { id: Expense["id"] } }
   | {
       type: "UPDATE";
@@ -70,8 +40,9 @@ type Action =
 const expensesReducer = (expenses: Expense[], action: Action): Expense[] => {
   switch (action.type) {
     case "ADD":
-      const id = new Date().toString() + Math.random().toString();
-      return [{ id, ...action.payload }, ...expenses];
+      return [action.payload, ...expenses];
+    case "SET":
+      return action.payload.reverse();
     case "UPDATE":
       const updatableExpenseIndex = expenses.findIndex(
         (expense) => expense.id === action.payload.id
@@ -100,9 +71,7 @@ const ExpensesContextProvider = ({
   );
 
   // Define functions that dispatch actions
-  const addExpense = (
-    data: Pick<Expense, "description" | "amount" | "date">
-  ) => {
+  const addExpense = (data: Expense) => {
     dispatch({ type: "ADD", payload: data });
   };
 
@@ -117,12 +86,17 @@ const ExpensesContextProvider = ({
     dispatch({ type: "UPDATE", payload: { id, data } });
   };
 
+  const setExpenses = (expenses: Expense[]) => {
+    dispatch({ type: "SET", payload: expenses });
+  };
+
   // Value to pass through context
   const value: ExpensesContextProps = {
     expenses,
     addExpense,
     deleteExpense,
     updateExpense,
+    setExpenses,
   };
 
   return (

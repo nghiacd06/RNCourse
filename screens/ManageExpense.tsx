@@ -14,12 +14,19 @@ import {
   Platform,
 } from "react-native";
 import { RootStackNavigationParamList } from "../App";
-import { useContext, useLayoutEffect, useMemo } from "react";
+import { useContext, useLayoutEffect, useMemo, useState } from "react";
 import IconButton from "../components/UI/IconButton";
 import { globalStyles } from "../constants/styles";
 import { ExpensesContext } from "../store/expenses-context";
 import ExpenseForm from "../components/ManageExpense/ExpenseForm";
 import { Expense } from "../types/Expense";
+import { storeExpense } from "../utils/http";
+import {
+  updateExpense as updateExpenseAxios,
+  deleteExpense as deleteExpenseAxios,
+} from "../utils/http";
+import LoadingOverlay from "../components/UI/Loadingoverlay";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
 const ManageExpense = () => {
   const { params } =
@@ -38,36 +45,67 @@ const ManageExpense = () => {
     [editedExpenseId]
   );
 
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [errMessage, setErrMessage] = useState<string>("");
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: editingExpense ? "Edit Expense" : "Add Expense",
     });
   }, [editingExpense, navigation]);
 
-  const onDeleteExpense = () => {
+  const onDeleteExpense = async () => {
     if (!editingExpense) {
       return;
     }
-
-    deleteExpense(editingExpense.id);
-    navigation.goBack();
+    setIsSubmitting(true);
+    try {
+      await deleteExpenseAxios(editingExpense.id);
+      deleteExpense(editingExpense.id);
+      navigation.goBack();
+    } catch (error) {
+      setErrMessage("Could not delete expense!");
+      setIsSubmitting(false);
+    }
   };
 
   const onCancel = () => {
     navigation.goBack();
   };
 
-  const onConfirm = (
+  const onConfirm = async (
     expenseData: Pick<Expense, "amount" | "description" | "date">
   ) => {
-    if (!editingExpense) {
-      addExpense(expenseData);
-    } else {
-      updateExpense(editingExpense.id, expenseData);
+    setIsSubmitting(true);
+    try {
+      if (!editingExpense) {
+        const id = await storeExpense(expenseData);
+        addExpense({ id, ...expenseData });
+      } else {
+        updateExpense(editingExpense.id, expenseData);
+        await updateExpenseAxios(editingExpense.id, expenseData);
+      }
+      navigation.goBack();
+    } catch (error) {
+      setErrMessage("Could not save expense!");
+      setIsSubmitting(false);
     }
-
-    navigation.goBack();
   };
+
+  const handleError = () => setErrMessage("");
+
+  if (errMessage && !isSubmitting) {
+    return (
+      <ErrorOverlay
+        message={errMessage}
+        onConfirm={handleError}
+      />
+    );
+  }
+
+  if (isSubmitting) {
+    return <LoadingOverlay />;
+  }
 
   return (
     <KeyboardAvoidingView
