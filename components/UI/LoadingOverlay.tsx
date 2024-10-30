@@ -1,24 +1,34 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
-import { globalStyles } from "../../constants/styles";
+import {
+  Text,
+  ActivityIndicator,
+  StyleSheet,
+  TextProps,
+  View,
+} from "react-native";
 
-const LoadingOverlay = () => {
+type LoadingOverlayProps = {
+  message: TextProps["children"];
+};
+
+const LoadingOverlay = ({ message }: LoadingOverlayProps) => {
   return (
-    <View style={styles.container}>
-      <ActivityIndicator
-        size="large"
-        color="white"
-      />
+    <View style={styles.rootContainer}>
+      <Text style={styles.message}>{message}</Text>
+      <ActivityIndicator size="large" />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  rootContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: 24,
-    backgroundColor: globalStyles.colors.primary700,
+    padding: 32,
+  },
+  message: {
+    fontSize: 16,
+    marginBottom: 12,
   },
 });
 

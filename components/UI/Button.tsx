@@ -41,23 +41,31 @@ const CustomButton = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 6,
-    padding: 8,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     backgroundColor: globalStyles.colors.primary500,
+    elevation: 2,
+    shadowColor: "black",
+    shadowOffset: { width: 1, height: 1 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
   },
   flat: {
     backgroundColor: "transparent",
+    paddingVertical: 6,
+    paddingHorizontal: 12,
   },
   buttonText: {
-    color: "white",
     textAlign: "center",
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   flatText: {
-    color: globalStyles.colors.primary200,
+    color: globalStyles.colors.primary100,
   },
   pressed: {
-    opacity: 0.75,
-    backgroundColor: globalStyles.colors.primary100,
-    borderRadius: 6,
+    opacity: 0.7,
   },
 });
 
