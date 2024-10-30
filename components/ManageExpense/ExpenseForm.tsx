@@ -64,8 +64,6 @@ const ExpenseForm = ({
       date: new Date(inputs.date.value),
     };
 
-    console.log(submitData.date.toString());
-
     const amountIsValid = !isNaN(submitData.amount) && submitData.amount > 0;
     const dateIsValid = submitData.date.toString() !== "Invalid Date";
     const descriptionIsValid = submitData.description.trim().length > 0;
@@ -92,15 +90,13 @@ const ExpenseForm = ({
     onConfirm(submitData);
   };
 
-  console.log(inputs.amount.isValid);
-
   const formIsInvalid =
     !inputs.amount.isValid ||
     !inputs.description.isValid ||
     !inputs.date.isValid;
 
   return (
-    <View>
+    <View style={styles.form}>
       <Text style={styles.title}>Your Expense</Text>
       <View style={styles.inputsRow}>
         <Input
@@ -155,6 +151,9 @@ const ExpenseForm = ({
 };
 
 const styles = StyleSheet.create({
+  form: {
+    marginTop: 40,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

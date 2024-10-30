@@ -4,7 +4,15 @@ import {
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
-import { StyleSheet, Text, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableNativeFeedback,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { RootStackNavigationParamList } from "../App";
 import { useContext, useLayoutEffect, useMemo } from "react";
 import IconButton from "../components/UI/IconButton";
@@ -62,33 +70,43 @@ const ManageExpense = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ExpenseForm
-        submitButtonLabel={!!editingExpense ? "Update" : "Add"}
-        onCancel={onCancel}
-        onConfirm={onConfirm}
-        defaultValues={editingExpense}
-      />
-
-      {!!editingExpense && (
-        <View style={styles.deleteContainer}>
-          <IconButton
-            icon="trash"
-            color={globalStyles.colors.error500}
-            size={24}
-            onPress={onDeleteExpense}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+    >
+      <TouchableNativeFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.innerContainer}>
+          <ExpenseForm
+            submitButtonLabel={!!editingExpense ? "Update" : "Add"}
+            onCancel={onCancel}
+            onConfirm={onConfirm}
+            defaultValues={editingExpense}
           />
+
+          {!!editingExpense && (
+            <View style={styles.deleteContainer}>
+              <IconButton
+                icon="trash"
+                color={globalStyles.colors.error500}
+                size={24}
+                onPress={onDeleteExpense}
+              />
+            </View>
+          )}
         </View>
-      )}
-    </View>
+      </TouchableNativeFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  innerContainer: {
+    flex: 1,
     padding: 24,
-    backgroundColor: globalStyles.colors.primary700,
+    backgroundColor: globalStyles.colors.primary800,
   },
   deleteContainer: {
     paddingTop: 8,
