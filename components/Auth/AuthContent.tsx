@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 
 import Button from "../UI/Button";
+import FlatButton from "../UI/FlatButton";
 import AuthForm from "./AuthForm";
 import { globalStyles } from "../../constants/styles";
 import { Credentials } from "../../types";
@@ -24,11 +25,11 @@ const AuthContent = ({ isLogin, onAuthenticate }: AuthContentProps) => {
     confirmPassword: false,
   });
 
-  function switchAuthModeHandler() {
+  const switchAuthModeHandler = () => {
     // Todo
-  }
+  };
 
-  function submitHandler(credentials: Credentials) {
+  const submitHandler = (credentials: Credentials) => {
     let { email, confirmEmail, password, confirmPassword } = credentials;
 
     email = email.trim();
@@ -54,7 +55,7 @@ const AuthContent = ({ isLogin, onAuthenticate }: AuthContentProps) => {
       return;
     }
     onAuthenticate?.({ email, password });
-  }
+  };
 
   return (
     <View style={styles.authContent}>
@@ -64,12 +65,9 @@ const AuthContent = ({ isLogin, onAuthenticate }: AuthContentProps) => {
         credentialsInvalid={credentialsInvalid}
       />
       <View style={styles.buttons}>
-        <Button
-          mode="flat"
-          onPress={switchAuthModeHandler}
-        >
+        <FlatButton onPress={switchAuthModeHandler}>
           {isLogin ? "Create a new user" : "Log in instead"}
-        </Button>
+        </FlatButton>
       </View>
     </View>
   );
@@ -79,6 +77,7 @@ export default AuthContent;
 
 const styles = StyleSheet.create({
   authContent: {
+    flex: 1,
     marginTop: 64,
     marginHorizontal: 32,
     padding: 16,

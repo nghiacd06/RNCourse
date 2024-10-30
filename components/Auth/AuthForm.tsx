@@ -44,14 +44,14 @@ const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }: AuthFormProps) => {
     }
   }
 
-  function submitHandler() {
+  const submitHandler = () => {
     onSubmit({
       email: enteredEmail,
       confirmEmail: enteredConfirmEmail,
       password: enteredPassword,
       confirmPassword: enteredConfirmPassword,
     });
-  }
+  };
 
   return (
     <View style={styles.form}>
