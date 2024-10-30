@@ -67,9 +67,7 @@ const ExpenseOverview = () => {
             size={24}
             color={tintColor ?? "white"}
             onPress={() => {
-              console.log("aaa");
-
-              return navigation.navigate("ManageExpense");
+              navigation.navigate("ManageExpense");
             }}
           />
         ),

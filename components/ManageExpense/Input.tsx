@@ -13,17 +13,21 @@ type InputProps = {
   style?: StyleProp<ViewStyle>;
   label: string;
   textInputConfigs?: Partial<TextInputProps>;
+  invalid?: boolean;
 };
 
-const Input = ({ style, label, textInputConfigs }: InputProps) => {
+const Input = ({ style, label, textInputConfigs, invalid }: InputProps) => {
   const inputStyles = [
     styles.input,
     ...(textInputConfigs?.multiline ? [styles.inputMultiline] : []),
+    ...(invalid ? [styles.invalidInput] : []),
   ];
 
   return (
     <View style={[styles.container, style]}>
-      <Text style={styles.label}>{label}</Text>
+      <Text style={[styles.label, invalid && styles.invalidLabel]}>
+        {label}
+      </Text>
       <TextInput
         style={inputStyles}
         {...textInputConfigs}
@@ -52,6 +56,12 @@ const styles = StyleSheet.create({
   inputMultiline: {
     minHeight: 100,
     textAlignVertical: "top",
+  },
+  invalidInput: {
+    backgroundColor: globalStyles.colors.error50,
+  },
+  invalidLabel: {
+    color: globalStyles.colors.error500,
   },
 });
 

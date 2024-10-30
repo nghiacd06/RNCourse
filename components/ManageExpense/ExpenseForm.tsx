@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Expense } from "../../types/Expense";
 import CustomButton from "../UI/Button";
 import { getFormattedDate } from "../../utils/date";
+import { globalStyles } from "../../constants/styles";
 
 export type ExpenseFormBody = Pick<Expense, "amount" | "description" | "date">;
 
@@ -30,15 +31,15 @@ const ExpenseForm = ({
     >
   >({
     amount: {
-      isValid: !!defaultValues,
+      isValid: true,
       value: defaultValues ? defaultValues?.amount?.toString() : "",
     },
     description: {
-      isValid: !!defaultValues,
+      isValid: true,
       value: defaultValues?.description ?? "",
     },
     date: {
-      isValid: !!defaultValues,
+      isValid: true,
       value: defaultValues?.date ? getFormattedDate(defaultValues?.date) : "",
     },
   });
@@ -62,6 +63,8 @@ const ExpenseForm = ({
       description: inputs.description.value,
       date: new Date(inputs.date.value),
     };
+
+    console.log(submitData.date.toString());
 
     const amountIsValid = !isNaN(submitData.amount) && submitData.amount > 0;
     const dateIsValid = submitData.date.toString() !== "Invalid Date";
@@ -89,6 +92,13 @@ const ExpenseForm = ({
     onConfirm(submitData);
   };
 
+  console.log(inputs.amount.isValid);
+
+  const formIsInvalid =
+    !inputs.amount.isValid ||
+    !inputs.description.isValid ||
+    !inputs.date.isValid;
+
   return (
     <View>
       <Text style={styles.title}>Your Expense</Text>
@@ -101,6 +111,7 @@ const ExpenseForm = ({
             value: inputs.amount.value,
           }}
           style={styles.rowInput}
+          invalid={!inputs.amount.isValid}
         />
         <Input
           label="Date"
@@ -111,6 +122,7 @@ const ExpenseForm = ({
             value: inputs.date.value,
           }}
           style={styles.rowInput}
+          invalid={!inputs.date.isValid}
         />
       </View>
       <Input
@@ -120,7 +132,9 @@ const ExpenseForm = ({
           onChangeText: onInputChange.bind(this, "description"),
           value: inputs.description.value,
         }}
+        invalid={!inputs.description.isValid}
       />
+      {formIsInvalid && <Text style={styles.errorText}>Invalid inputs!</Text>}
       <View style={styles.buttons}>
         <CustomButton
           mode="flat"
@@ -154,6 +168,10 @@ const styles = StyleSheet.create({
   },
   rowInput: {
     flex: 1,
+  },
+  errorText: {
+    fontSize: 16,
+    color: globalStyles.colors.error500,
   },
   buttons: {
     flexDirection: "row",
