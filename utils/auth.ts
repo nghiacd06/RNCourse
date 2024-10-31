@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Credentials } from "../types";
 
-const API_KEY = "AIzaSyAWhrAma5JJkGqUd-xqhwFNPuAxpGoDHEY";
+const API_KEY = ""; // get from firebase
 
 const authenticate = async (
   mode: "signUp" | "signInWithPassword",
