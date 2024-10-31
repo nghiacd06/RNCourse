@@ -6,6 +6,9 @@ import FlatButton from "../UI/FlatButton";
 import AuthForm from "./AuthForm";
 import { globalStyles } from "../../constants/styles";
 import { Credentials } from "../../types";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackNavigationParamList } from "../../App";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type AuthContentProps = {
   isLogin?: boolean;
@@ -16,6 +19,9 @@ type AuthContentProps = {
 };
 
 const AuthContent = ({ isLogin, onAuthenticate }: AuthContentProps) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackNavigationParamList>>();
+
   const [credentialsInvalid, setCredentialsInvalid] = useState<
     Record<keyof Credentials, boolean>
   >({
@@ -26,7 +32,11 @@ const AuthContent = ({ isLogin, onAuthenticate }: AuthContentProps) => {
   });
 
   const switchAuthModeHandler = () => {
-    // Todo
+    if (isLogin) {
+      navigation.replace("SignUp");
+    } else {
+      navigation.replace("Login");
+    }
   };
 
   const submitHandler = (credentials: Credentials) => {
@@ -77,7 +87,6 @@ export default AuthContent;
 
 const styles = StyleSheet.create({
   authContent: {
-    flex: 1,
     marginTop: 64,
     marginHorizontal: 32,
     padding: 16,

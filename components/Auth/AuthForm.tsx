@@ -4,6 +4,8 @@ import { StyleSheet, View } from "react-native";
 import Button from "../UI/Button";
 import Input from "./Input";
 import { Credentials } from "../../types";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { RootStackNavigationParamList } from "../../App";
 
 type AuthFormProps = {
   isLogin?: boolean;
@@ -12,6 +14,8 @@ type AuthFormProps = {
 };
 
 const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }: AuthFormProps) => {
+  const navigation =
+    useNavigation<NavigationProp<RootStackNavigationParamList>>();
   const [enteredEmail, setEnteredEmail] = useState("");
   const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
@@ -54,7 +58,7 @@ const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }: AuthFormProps) => {
   };
 
   return (
-    <View style={styles.form}>
+    <View>
       <View>
         <Input
           label="Email Address"
@@ -104,9 +108,6 @@ const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }: AuthFormProps) => {
 export default AuthForm;
 
 const styles = StyleSheet.create({
-  form: {
-    flex: 1,
-  },
   buttons: {
     marginTop: 12,
   },

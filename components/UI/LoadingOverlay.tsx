@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 type LoadingOverlayProps = {
-  message: TextProps["children"];
+  message?: TextProps["children"];
 };
 
 const LoadingOverlay = ({ message }: LoadingOverlayProps) => {
