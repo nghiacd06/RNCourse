@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "meals",
-    "slug": "meals",
+    "name": "Meals",
+    "slug": "Meals",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -13,16 +13,24 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "versionCode": 1,
+      "package": "com.nghiacdit.meals"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c8c58102-111f-4b6b-9b66-c3100fd5e620"
+      }
     }
   }
 }
